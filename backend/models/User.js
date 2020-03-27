@@ -34,6 +34,11 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+},  
+{
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+
 });
 
 // Encrypt password using bcrypt
@@ -74,5 +79,49 @@ UserSchema.methods.getResetPasswordToken = function() {
 
   return resetToken;
 };
+
+
+UserSchema.virtual('posts', {
+  ref: 'Post',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+});
+
+UserSchema.virtual('comments', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+});
+
+UserSchema.virtual('likes', {
+  ref: 'Like',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+});
+
+UserSchema.virtual('dislikes', {
+  ref: 'Dislike',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+});
+
+UserSchema.virtual('events', {
+  ref: 'Event',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+});
+
+UserSchema.virtual('eventsUsers', {
+  ref: 'EventUser',
+  localField: '_id',
+  foreignField: 'user',
+  justOne: false
+});
+
 
 module.exports = mongoose.model('User', UserSchema);
