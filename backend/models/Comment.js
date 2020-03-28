@@ -13,11 +13,11 @@ const CommentSchema = new mongoose.Schema({
     default: Date.now
   },
 
-  // feed: {
-  //   type: mongoose.Schema.ObjectId,
-  //   ref: 'Feed',
-  //   required: true
-  // },
+  feed: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'Feed',
+    required: true
+  },
 
   user: {
     type: mongoose.Schema.ObjectId,
@@ -29,9 +29,9 @@ const CommentSchema = new mongoose.Schema({
 
 
 // Static method to get total comments and save
-CommentSchema.statics.getTotalComments = async function(postId) {
-  
-  const getTotal = this.countDocuments( {post: postId});
+CommentSchema.statics.getTotalComments = async function (postId) {
+
+  const getTotal = this.countDocuments({ post: postId });
 
 
   try {
@@ -44,12 +44,12 @@ CommentSchema.statics.getTotalComments = async function(postId) {
 };
 
 // Call getTotalCommrnts after save
-CommentSchema.post('save', function() {
+CommentSchema.post('save', function () {
   this.constructor.getTotalComments(this.post);
 });
 
 // Call getTotalComments before remove
-CommentSchema.pre('remove', function() {
+CommentSchema.pre('remove', function () {
   this.constructor.getTotalComments(this.post);
 });
 

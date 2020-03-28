@@ -19,7 +19,7 @@ router.use(authorize('admin'));
 
 router
   .route('/')
-  .get(advancedResults(User), getUsers)
+  .get(advancedResults(User, []), getUsers)
   .post(createUser);
 
 router

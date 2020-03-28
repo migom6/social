@@ -34,15 +34,15 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
-},  
-{
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
+},
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
 
-});
+  });
 
 // Encrypt password using bcrypt
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     next();
   }
@@ -52,19 +52,19 @@ UserSchema.pre('save', async function(next) {
 });
 
 // Sign JWT and return
-UserSchema.methods.getSignedJwtToken = function() {
+UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE
   });
 };
 
 // Match user entered password to hashed password in database
-UserSchema.methods.matchPassword = async function(enteredPassword) {
+UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Generate and hash password token
-UserSchema.methods.getResetPasswordToken = function() {
+UserSchema.methods.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -80,48 +80,11 @@ UserSchema.methods.getResetPasswordToken = function() {
   return resetToken;
 };
 
-
-UserSchema.virtual('posts', {
-  ref: 'Post',
+UserSchema.virtual('feeds', {
+  ref: 'Feed',
   localField: '_id',
   foreignField: 'user',
   justOne: false
 });
-
-UserSchema.virtual('comments', {
-  ref: 'Comment',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
-});
-
-UserSchema.virtual('likes', {
-  ref: 'Like',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
-});
-
-UserSchema.virtual('dislikes', {
-  ref: 'Dislike',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
-});
-
-UserSchema.virtual('events', {
-  ref: 'Event',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
-});
-
-UserSchema.virtual('eventsUsers', {
-  ref: 'EventUser',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
-});
-
 
 module.exports = mongoose.model('User', UserSchema);

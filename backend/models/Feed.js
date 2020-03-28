@@ -3,27 +3,27 @@ const mongoose = require('mongoose');
 const FeedSchema = new mongoose.Schema(
   {
     createdAt: {
-        type: Date,
-        default: Date.now
+      type: Date,
+      default: Date.now
     },
-    
+
     kind: {
-        type: String,
-        enum: ['post', 'event']
+      type: String,
+      enum: ['post', 'event']
     },
 
     post: {
       type: mongoose.Schema.ObjectId,
       ref: 'Post',
       default: null
-      
+
     },
 
     event: {
       type: mongoose.Schema.ObjectId,
       ref: 'Event',
       default: null
-      
+
     },
 
     user: {
@@ -33,29 +33,29 @@ const FeedSchema = new mongoose.Schema(
     },
   },
 
-    {
-      toJSON: { virtuals: true },
-      toObject: { virtuals: true }
-    }
+  {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
 
 );
 
 
 
 // Cascade delete feeds when a feed is deleted
-FeedSchema.pre('remove', async function(next) {
+FeedSchema.pre('remove', async function (next) {
 
   console.log(`Comments being removed from feed ${this._id}`);
   await this.model('Comment').deleteMany({ feed: this._id });
 
-  if(this.type === 'post') {
+  if (this.type === 'post') {
 
     console.log(`Posts being removed from feed ${this._id}`);
     await this.model('Post').deleteMany({ feed: this._id });
 
   }
 
-  if(this.type === 'event') {
+  if (this.type === 'event') {
 
     console.log(`Events being removed from feed ${this._id}`);
     await this.model('Event').deleteMany({ feed: this._id });
@@ -65,7 +65,6 @@ FeedSchema.pre('remove', async function(next) {
   next();
 });
 
-
 FeedSchema.virtual('comments', {
   ref: 'Comment',
   localField: '_id',
@@ -73,11 +72,19 @@ FeedSchema.virtual('comments', {
   justOne: false
 });
 
-FeedSchema.virtual('events', {
+FeedSchema.virtual('post-content', {
+  ref: 'Post',
+  localField: 'post',
+  foreignField: '_id',
+  justOne: true
+});
+
+
+FeedSchema.virtual('event-content', {
   ref: 'Event',
-  localField: '_id',
-  foreignField: 'feed',
-  justOne: false
+  localField: 'event',
+  foreignField: '_id',
+  justOne: true
 });
 
 module.exports = mongoose.model('Feed', FeedSchema);
