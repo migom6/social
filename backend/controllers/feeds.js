@@ -3,6 +3,7 @@ const asyncHandler = require('../middleware/async');
 const Feed = require('../models/Feed');
 const Post = require('../models/Post');
 const Event = require('../models/Event');
+const EventUser = require('../models/EventUser');
 // const Comment = require('../models/Comment');
 
 
@@ -59,8 +60,11 @@ exports.addFeed = asyncHandler(async (req, res, next) => {
     feed = await Feed.create({ user, post,kind: req.body.kind })
   }
   else if (req.body.kind === 'event') {
-    event = await Event.create(req.body);
-    feed = await Feed.create({ user, event,kind: req.body.kind })
+    event = await Event.create(req.body);console.log(event);
+    feed = await Feed.create({ user, event,kind: req.body.kind });
+    await EventUser.create({user,event});
+    
+
   }
   else {
     return next(
