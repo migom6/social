@@ -54,17 +54,17 @@ FeedSchema.pre('remove', async function (next) {
   console.log(`Comments being removed from feed ${this._id}`);
   await this.model('Comment').deleteMany({ feed: this._id });
 
-  if (this.type === 'post') {
+  if (this.kind === 'post') {
 
     console.log(`Posts being removed from feed ${this._id}`);
-    await this.model('Post').deleteMany({ feed: this._id });
+    await this.model('Post').deleteMany({ _id: this.post });
 
   }
 
-  if (this.type === 'event') {
+  if (this.kind === 'event') {
 
     console.log(`Events being removed from feed ${this._id}`);
-    await this.model('Event').deleteMany({ feed: this._id });
+    await this.model('Event').deleteMany({ _id: this.event });
 
   }
 
