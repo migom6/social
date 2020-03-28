@@ -9,10 +9,17 @@ const {
 
 const Feed = require('../models/Feed');
 
+// Include other resource routers
+const commentRouter = require('./comments');
+
 const router = express.Router({ mergeParams: true });
 
 const advancedResults = require('../middleware/advancedResults');
-const { protect, authorize } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
+
+// Re-route into other resource routers
+router.use('/:feedId/comments', commentRouter);
+
 
 router.use(protect);
 
@@ -25,10 +32,10 @@ router
   )
   .post(addFeed);
 
-// router
-//   .route('/:id')
-//   .get(getFeed)
-//   .put(protect, updateFeed)
-//   .delete(protect, deleteFeed);
+router
+  .route('/:feedId')
+  .get(getFeed)
+  .put(updateFeed)
+  .delete(deleteFeed);
 
 module.exports = router;

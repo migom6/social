@@ -1,34 +1,33 @@
 const express = require('express');
 const {
   getComments,
-  getComment,
   addComment,
   updateComment,
-  deleteComment
-} = require('../controllers/courses');
+  deleteComment,
+  getComment
+} = require('../controllers/comments');
 
 const Comment = require('../models/Comment');
 
 const router = express.Router({ mergeParams: true });
 
 const advancedResults = require('../middleware/advancedResults');
-const { protect, authorize } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
+
+router.use(protect);
 
 router
   .route('/')
   .get(
-    advancedResults(Comment, {
-      path: 'post',
-      select: 'name text'
-    }),
+    advancedResults(Comment, []),
     getComments
   )
-  .post(protect, authorize('publisher', 'user'), addComment);
+  .post(addComment);
 
 router
-  .route('/:id')
+  .route('/:commentId')
   .get(getComment)
-  .put(protect, authorize('publisher', 'user'), updateComment)
-  .delete(protect, authorize('publisher', 'user'), deleteComment);
+  .put(updateComment)
+  .delete(deleteComment);
 
 module.exports = router;

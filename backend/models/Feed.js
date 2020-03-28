@@ -12,6 +12,11 @@ const FeedSchema = new mongoose.Schema(
       enum: ['post', 'event']
     },
 
+    totalComments: {
+      type: Number,
+      default: 0
+    },
+
     post: {
       type: mongoose.Schema.ObjectId,
       ref: 'Post',

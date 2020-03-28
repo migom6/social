@@ -3,7 +3,7 @@ const asyncHandler = require('../middleware/async');
 const Feed = require('../models/Feed');
 const Post = require('../models/Post');
 const Event = require('../models/Event');
-const Comment = require('../models/Comment');
+// const Comment = require('../models/Comment');
 
 
 // @desc      Get comments
@@ -45,4 +45,88 @@ exports.addFeed = asyncHandler(async (req, res, next) => {
     success: true,
     data: feed
   });
+});
+
+exports.getFeed = asyncHandler(async (req, res, next) => {
+
+  const feed = await Feed.findById(req.params.feedId)
+  if (!feed) {
+    return next(new ErrorResponse(`Feed with id ${req.params.feedId} not found`), 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: feed
+  });
+
+});
+
+exports.updateFeed = asyncHandler(async (req, res, next) => {
+
+  let feed = await Feed.findById(req.params.feedId);
+
+  if (!feed) {
+    return next(
+      new ErrorResponse(`Feed not found with id of ${req.params.feedId}`, 404)
+    );
+  }
+
+  // Make sure user is post owner
+  if (feed.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to update this feed`,
+        401
+      )
+    );
+  }
+
+  if (req.body.kind === "post") {
+    req.body.kind = undefined;
+    await Post.findByIdAndUpdate(feed.post, req.body, {
+      new: true,
+      runValidators: true
+    });
+  }
+  else if (req.body.kind === "event") {
+    req.body.kind = undefined;
+    await Event.findByIdAndUpdate(feed.event, req.body, {
+      new: true,
+      runValidators: true
+    });
+  }
+  else {
+    return next(new ErrorResponse("Wrong kind of feed in body"), 400);
+  }
+
+  return res.status(200).json({ success: true, data: feed });
+
+})
+
+
+// @desc      Delete post
+// @route     DELETE /api/v1/posts/:id
+// @access    Private
+exports.deleteFeed = asyncHandler(async (req, res, next) => {
+  const feed = await Feed.findById(req.params.feedId);
+
+  if (!feed) {
+    return next(
+      new ErrorResponse(`Feed not found with id of ${req.params.feedId}`, 404)
+    );
+  }
+
+  // Make sure user is post owner
+  if (feed.user.toString() !== req.user.id && req.user.role !== 'admin') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to delete this feed`,
+        401
+      )
+    );
+  }
+
+  await feed.remove();
+
+  res.status(200).json({ success: true, data: {} });
 });

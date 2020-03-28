@@ -1,15 +1,13 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const Comment = require('../models/Comment');
-const Post = require('../models/Post');
 
 // @desc      Get comments
-// @route     GET /api/v1/comments
 // @route     GET /api/v1/posts/:postId/comments
-// @access    Public
+// @access    Private
 exports.getComments = asyncHandler(async (req, res, next) => {
-  if (req.params.postId) {
-    const comments = await Comment.find({ post: req.params.postId });
+  if (req.params.feedId) {
+    const comments = await Comment.find({ feed: req.params.feedId });
 
     return res.status(200).json({
       success: true,
@@ -17,126 +15,97 @@ exports.getComments = asyncHandler(async (req, res, next) => {
       data: comments
     });
   } else {
-    res.status(200).json(res.advancedResults);
+    return next(new ErrorResponse(`No postId in params found`, 500));
   }
 });
 
-// @desc      Get single post
-// @route     GET /api/v1/comments/:id
-// @access    Public
-exports.getComment = asyncHandler(async (req, res, next) => {
-  const post = await Comment.findById(req.params.id).populate({
-    path: 'post',
-    select: 'name description'
-  });
-
-  if (!post) {
-    return next(
-      new ErrorResponse(`No post with the id of ${req.params.id}`, 404)
-    );
-  }
-
-  res.status(200).json({
-    success: true,
-    data: post
-  });
-});
-
-// @desc      Add post
+// @desc      Add comment
 // @route     POST /api/v1/posts/:postId/comments
 // @access    Private
 exports.addComment = asyncHandler(async (req, res, next) => {
-  req.body.post = req.params.postId;
+  req.body.feed = req.params.feedId;
   req.body.user = req.user.id;
 
-  const post = await Post.findById(req.params.postId);
-
-  if (!post) {
-    return next(
-      new ErrorResponse(
-        `No post with the id of ${req.params.postId}`,
-        404
-      )
-    );
-  }
-
-  // Make sure user is post owner
-  if (post.user.toString() !== req.user.id && req.user.role !== 'admin') {
-    return next(
-      new ErrorResponse(
-        `User ${req.user.id} is not authorized to add a post to post ${post._id}`,
-        401
-      )
-    );
-  }
-
-  const post = await Comment.create(req.body);
-
+  const comment = await Comment.create(req.body);
   res.status(200).json({
     success: true,
-    data: post
+    data: comment
   });
 });
 
-// @desc      Update post
+// @desc      Update comment
 // @route     PUT /api/v1/comments/:id
 // @access    Private
 exports.updateComment = asyncHandler(async (req, res, next) => {
-  let post = await Comment.findById(req.params.id);
+  let comment = await Comment.findById(req.params.commentId);
 
-  if (!post) {
+  if (!comment) {
     return next(
-      new ErrorResponse(`No post with the id of ${req.params.id}`, 404)
+      new ErrorResponse(`No comment with the id of ${req.params.commentId}`, 404)
     );
   }
 
-  // Make sure user is post owner
-  if (post.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  // Make sure user is comment owner
+  if (comment.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to update post ${post._id}`,
+        `User ${req.user.id} is not authorized to update comment ${comment._id}`,
         401
       )
     );
   }
 
-  post = await Comment.findByIdAndUpdate(req.params.id, req.body, {
+  comment = await Comment.findByIdAndUpdate(req.params.commentId, req.body, {
     new: true,
     runValidators: true
   });
 
   res.status(200).json({
     success: true,
-    data: post
+    data: comment
   });
 });
 
-// @desc      Delete post
-// @route     DELETE /api/v1/comments/:id
+// @desc      Delete comment
+// @route     DELETE /api/v1/comments/:commentId
 // @access    Private
 exports.deleteComment = asyncHandler(async (req, res, next) => {
-  const post = await Comment.findById(req.params.id);
+  const comment = await Comment.findById(req.params.commentId);
 
-  if (!post) {
+  if (!comment) {
     return next(
-      new ErrorResponse(`No post with the id of ${req.params.id}`, 404)
+      new ErrorResponse(`No comment with the id of ${req.params.commentId}`, 404)
     );
   }
 
-  // Make sure user is post owner
-  if (post.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  // Make sure user is comment owner
+  if (comment.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to delete post ${post._id}`,
+        `User ${req.user.id} is not authorized to delete comment ${comment._id}`,
         401
       )
     );
   }
 
-  await post.remove();
+  await comment.remove();
 
   res.status(200).json({
     success: true,
     data: {}
   });
+});
+
+
+// @desc      Get comment
+// @route     GET /api/v1/comments/:commentId
+// @access    Private
+exports.getComment = asyncHandler(async (req, res, next) => {
+
+  const comment = await Comment.findById(req.params.id);
+  res.status(200).json({
+    success: true,
+    data: comment
+  });
+
 });
