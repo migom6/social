@@ -25,10 +25,10 @@ router
   )
   .post(addFeed);
 
-// router
-//   .route('/:id')
-//   .get(getFeed)
-//   .put(protect, updateFeed)
+router
+  .route('/:id')
+  .get(getFeed)
+  //.put(protect, updateFeed)
 //   .delete(protect, deleteFeed);
 
 module.exports = router;

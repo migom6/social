@@ -16,8 +16,26 @@ exports.getFeeds = asyncHandler(async (req, res, next) => {
 
 });
 
-// @desc      Create new bootcamp
-// @route     POST /api/v1/bootcamps
+// @desc      Get single feed
+// @route     GET /api/v1/feeds/:id
+// @access    Public
+exports.getFeed = asyncHandler(async (req, res, next) => {
+  //const feed = await Feed.findById(req.params.id);
+
+  Feed.findOne({ _id: req.params.id }).populate('post').
+  exec(function (err, feed) {
+    if (err) return next(
+          new ErrorResponse(`Feed not found with id of ${req.params.id}`, 404)
+        );
+    console.log('The post is %s', feed);
+    res.status(200).json({ success: true, data: feed});
+    
+  });
+
+});
+
+// @desc      Create new feed
+// @route     POST /api/v1/feeds
 // @access    Private
 exports.addFeed = asyncHandler(async (req, res, next) => {
 
