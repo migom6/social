@@ -29,28 +29,34 @@ const CommentSchema = new mongoose.Schema({
 
 
 // Static method to get total comments and save
-CommentSchema.statics.getTotalComments = async function (postId) {
+CommentSchema.statics.getTotalComments = async function (feed) {
 
-  const getTotal = this.countDocuments({ post: postId });
+  this.countDocuments({ feed }, async (err, count) => {
 
+    if (err) {
+      console.log(err);
+    }
 
-  try {
-    await this.model('Post').findByIdAndUpdate(postId, {
-      totalComments: getTotal
-    });
-  } catch (err) {
-    console.error(err);
-  }
+    try {
+      await this.model('Feed').findByIdAndUpdate(feed, {
+        totalComments: count
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
+  })
+
 };
 
-// Call getTotalCommrnts after save
+// Call getTotalComments after save
 CommentSchema.post('save', function () {
-  this.constructor.getTotalComments(this.post);
+  this.constructor.getTotalComments(this.feed);
 });
 
 // Call getTotalComments before remove
-CommentSchema.pre('remove', function () {
-  this.constructor.getTotalComments(this.post);
+CommentSchema.post('remove', function () {
+  this.constructor.getTotalComments(this.feed);
 });
 
 module.exports = mongoose.model('Comment', CommentSchema);

@@ -23,10 +23,6 @@ const PostSchema = new mongoose.Schema(
       default: 0
     },
 
-    totalComments: {
-      type: Number,
-      default: 0
-    },
   },
 );
 

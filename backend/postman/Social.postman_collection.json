@@ -108,7 +108,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"name\": \"somveer\",\n\t\"email\": \"somveer@gmail.com\",\n\t\"password\": \"123456\",\n\t\"role\": \"user\"\n}",
+							"raw": "{\n\t\"name\": \"somveer\",\n\t\"email\": \"migom6@gmail.com\",\n\t\"password\": \"123456\",\n\t\"role\": \"user\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -194,7 +194,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"kind\": \"post\",\n\t\"text\": \"2nd post!\"\n}",
+							"raw": "{\n\t\"kind\": \"post\",\n\t\"text\": \"1st post!\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -223,7 +223,207 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": ""
+							"raw": "http://localhost:6000/api/v1/feeds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"feeds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Feed by id",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6000/api/v1/feeds/5e7fa07379022202b5be6ab6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"5e7fa07379022202b5be6ab6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update feed",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"kind\": \"post\",\n\t\"text\": \"new description\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6000/api/v1/feeds/5e7fa07379022202b5be6ab6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"5e7fa07379022202b5be6ab6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete feed",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6000/api/v1/feeds/5e7f9af231fecc01c0823a53",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"5e7f9af231fecc01c0823a53"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "comment",
+			"item": [
+				{
+					"name": "get comments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6000/api/v1/feeds/5e7fa07379022202b5be6ab6/comments/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"5e7fa07379022202b5be6ab6",
+								"comments",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add comment",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\": \"yo yo yo\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6000/api/v1/feeds/5e7fa07379022202b5be6ab6/comments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"feeds",
+								"5e7fa07379022202b5be6ab6",
+								"comments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete comment",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:6000/api/v1/comments/5e7fa44f31d4d8032178273a",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"5e7fa44f31d4d8032178273a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update comment",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"text\" : \"updated comment\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:6000/api/v1/comments/5e7fa0f179022202b5be6ab7",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "6000",
+							"path": [
+								"api",
+								"v1",
+								"comments",
+								"5e7fa0f179022202b5be6ab7"
+							]
 						}
 					},
 					"response": []

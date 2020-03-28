@@ -13,6 +13,11 @@ const FeedSchema = new mongoose.Schema(
       required: true
     },
 
+    totalComments: {
+      type: Number,
+      default: 0
+    },
+
     post: {
       type: mongoose.Schema.ObjectId,
       ref: 'Post',

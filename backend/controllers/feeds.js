@@ -3,7 +3,7 @@ const asyncHandler = require('../middleware/async');
 const Feed = require('../models/Feed');
 const Post = require('../models/Post');
 const Event = require('../models/Event');
-const Comment = require('../models/Comment');
+// const Comment = require('../models/Comment');
 
 
 // @desc      Get comments
