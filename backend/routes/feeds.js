@@ -28,7 +28,7 @@ router
 router
   .route('/:id')
   .get(getFeed)
-  //.put(protect, updateFeed)
+  .put(protect, updateFeed)
 //   .delete(protect, deleteFeed);
 
 module.exports = router;

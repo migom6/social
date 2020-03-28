@@ -9,7 +9,8 @@ const FeedSchema = new mongoose.Schema(
 
     kind: {
       type: String,
-      enum: ['post', 'event']
+      enum: ['post', 'event'],
+      required: true
     },
 
     post: {
