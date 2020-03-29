@@ -11,8 +11,15 @@ const Feed = require('../models/Feed');
 
 const router = express.Router({ mergeParams: true });
 
+// Include other resource routers
+const eventUser = require('./eventUsers');
+
+
 const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
+
+// Re-route into other resource routers
+router.use('/:id/eventusers', eventUser);
 
 router.use(protect);
 
