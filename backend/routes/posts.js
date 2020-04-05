@@ -11,7 +11,9 @@ const {
 const Post = require('../models/Post');
 
 // Include other resource routers
-const commentRouter = require('./comments.js');
+// const commentRouter = require('./comments.js');
+const likes = require('./likes');
+const dislikes = require('./dislikes');
 
 const router = express.Router();
 
@@ -19,7 +21,10 @@ const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
 // Re-route into other resource routers
-router.use('/:postId/comments', commentRouter);
+// router.use('/:postId/.....', commentRouter);
+router.use('/:postId/likes', likes);
+router.use('/:postId/dislikes', dislikes);
+
 
 
 
@@ -33,7 +38,7 @@ router
   .post(protect, authorize('publisher', 'user'), createPost);
 
 router
-  .route('/:id')
+  .route('/:postId')
   .get(getPost)
 //   .put(protect, authorize('publisher', 'admin'), updatePost)
 //   .delete(protect, authorize('publisher', 'admin'), deletePost);

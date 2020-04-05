@@ -1,46 +1,59 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const EventUser = require('../models/EventUser');
-const Feed = require('../models/Feed');
+const Event = require('../models/Event');
 const User = require('../models/User');
 
 
 //@desc        addUser
-//@route       GET /api/v1/:feedId/
+//@route       GET /api/v1/:eventId/eventusers
 //@access      user
-exports.addUser = asyncHandler(async (req,res, next) => {
+exports.going = asyncHandler(async (req,res, next) => {
 
-    let feed = await Feed.findById(req.params.id);
+   let event = Event.findOne({event: req.params.eventId});
 
-    event = feed.event;
-    user = feed.user;
+   if(!event) {
+       return next( new ErrorResponse(`Event is not found with id ${req.params.eventId}`))
+   }
 
-    eventUser = await EventUser.create({user,event});
+    event = req.params.eventId;
+    user = req.user.id;
 
-    res.status(200).json({eventUser});
+    // let isUser = await EventUser.findOne({ user, event });
+
+    // if(isUser) {
+
+    //     return res.status(200).json({
+    //         success: true,
+    //         data : "Already going"
+    //     });
+
+    // }
+
+    let eventUser = await EventUser.create({user,event});
+
+    res.status(200).json({
+        success: true,
+        data: eventUser
+    });
 
 });
 
 //@desc        Get all the Users of an Event
-//@route       GET /api/v1/:feedId/users
+//@route       GET /api/v1/:eventId/eventusers/users
 //@access      user
-exports.getUsers = asyncHandler(async (req, res, next) => {
+exports.usersByEvent = asyncHandler(async (req, res, next) => {
 
-    let feed = await Feed.findById(req.params.id);
-
-    let users = await EventUser.find({event: feed.event}).populate('user');
+    let users = await EventUser.find({event: req.params.eventId}).populate('user');
     
     res.status(200).json(users);
 })
 
 //@desc        Get all Events of an User
-//@route       GET /api/v1/:feedId/events
+//@route       GET /api/v1/:eventId/eventusers/events
 //@access      user
-exports.getEvents = asyncHandler(async (req, res, next) => {
+exports.eventsByUser = asyncHandler(async (req, res, next) => {
 
-    let feed = await Feed.findById(req.params.id);
-    console.log(req.params.id);
-
-    let events = await EventUser.find({user: feed.user}).populate('event');
+    let events = await EventUser.find({user: req.user.id}).populate('event');
     res.status(200).json(events);
 })

@@ -6,6 +6,7 @@ const {
   updateUser,
   deleteUser
 } = require('../controllers/users');
+const {eventsByUser} = require('../controllers/eventUsers');
 
 const User = require('../models/User');
 
@@ -15,17 +16,20 @@ const advancedResults = require('../middleware/advancedResults');
 const { protect, authorize } = require('../middleware/auth');
 
 router.use(protect);
-router.use(authorize('admin'));
+//router.use(authorize('admin'));
 
 router
   .route('/')
-  .get(advancedResults(User, []), getUsers)
+  .get(authorize('admin'), advancedResults(User, []), getUsers)
   .post(createUser);
 
 router
   .route('/:id')
-  .get(getUser)
-  .put(updateUser)
-  .delete(deleteUser);
+  .get(authorize('admin'), getUser)
+  //.put(authorize('admin'), updateUser)
+  .delete(authorize('admin'), deleteUser);
+
+router
+  .route('/events', eventsByUser);
 
 module.exports = router;

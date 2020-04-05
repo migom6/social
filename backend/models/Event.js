@@ -19,22 +19,16 @@ const EventSchema = new mongoose.Schema(
       default: 'no-photo.jpg'
     },
 
-    going: Number, 
+    going: {
+      type: Number,
+    }
   
   }
 );
 
-// Adding event's creater to EventUser collection
-// EventSchema.statics.addEventUser = async function(userId,eventId) {
-//   console.log(`Adding event's creater to EventUser collection`);
-//   await this.model(EventSchema).create({
-//     user: userId,
-//     event: eventId
-//   });
-// };
 
 // delete all entries in  EventUser with this event
-EventSchema.pre('remove', async function(next) {
+EventSchema.post('remove', async function(next) {
   console.log(`EventUser being removed from event ${this._id}`);
   await this.model('EventUser').deleteMany({ event: this._id });
 });

@@ -23,28 +23,32 @@ const LikeSchema = new mongoose.Schema(
 
 LikeSchema.index({ post: 1, user: 1 }, { unique: true });
 
-CommentSchema.statics.getTotalLikes = async function (postId) {
+LikeSchema.statics.getTotalLikes = async function (postId) {
 
-  const getTotal = this.countDocuments({ post: postId });
-
+  this.countDocuments({ post: postId },async (err,count) => {
+  
+  if (err) {
+    console.log(err);
+  }
 
   try {
     await this.model('Post').findByIdAndUpdate(postId, {
-      totalLikes: getTotal
+      totalLikes: count
     });
   } catch (err) {
     console.error(err);
   }
+  });
 };
 
 // Call getTotalLikes after save
 LikeSchema.post('save', function () {
-  this.constructor.getAverageLikes(this.post);
+  this.constructor.getTotalLikes(this.post);
 });
 
 // Call getTotalLikes before remove
-LikeSchema.pre('remove', function () {
-  this.constructor.getAveragLikes(this.post);
+LikeSchema.post('remove', function () {
+  this.constructor.getTotalLikes(this.post);
 });
 
 module.exports = mongoose.model('Likes', LikeSchema);

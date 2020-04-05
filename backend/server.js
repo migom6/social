@@ -27,6 +27,10 @@ const auth = require('./routes/auth');
 const users = require('./routes/users');
 const feeds = require('./routes/feeds');
 const comments = require('./routes/comments');
+const posts = require('./routes/posts');
+const events = require('./routes/events');
+const polls = require('./routes/polls');
+
 
 const app = express();
 
@@ -76,6 +80,10 @@ app.use('/api/v1/auth', auth);
 app.use('/api/v1/users', users);
 app.use('/api/v1/feeds', feeds);
 app.use('/api/v1/comments', comments);
+app.use('/api/v1/posts', posts);
+app.use('/api/v1/events', events);
+app.use('/api/v1/polls', polls);
+
 
 app.use(errorHandler);
 

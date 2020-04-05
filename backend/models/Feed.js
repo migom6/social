@@ -9,7 +9,7 @@ const FeedSchema = new mongoose.Schema(
 
     kind: {
       type: String,
-      enum: ['post', 'event'],
+      enum: ['post', 'event', 'poll'],
       required: true
     },
 
@@ -32,6 +32,13 @@ const FeedSchema = new mongoose.Schema(
 
     },
 
+    poll: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Poll',
+      default: null
+
+    },
+
     user: {
       type: mongoose.Schema.ObjectId,
       ref: 'User',
@@ -49,26 +56,35 @@ const FeedSchema = new mongoose.Schema(
 
 
 // Cascade delete feeds when a feed is deleted
-FeedSchema.pre('remove', async function (next) {
+FeedSchema.post('remove', async function (next) {
 
   console.log(`Comments being removed from feed ${this._id}`);
   await this.model('Comment').deleteMany({ feed: this._id });
 
-  if (this.kind === 'post') {
+  if(this.kind === 'post') {
 
     console.log(`Posts being removed from feed ${this._id}`);
     await this.model('Post').deleteMany({ _id: this.post });
 
   }
 
-  if (this.kind === 'event') {
+  if(this.kind === 'event') {
 
     console.log(`Events being removed from feed ${this._id}`);
     await this.model('Event').deleteMany({ _id: this.event });
+    console.log(`Events being removed from EventUser ${this._id}`);
+    await this.model('EventUser').deleteMany({ event: this.event });
 
   }
 
-  next();
+  if(this.kind === 'poll') {
+
+    console.log(`Poll being removed from feed ${this._id}`);
+    await this.model('Poll').deleteMany({ _id: this.poll });
+    console.log(`pollings being removed from PollUser ${this._id}`);
+    await this.model('PollUser').deleteMany({ poll: this.poll });
+
+  }
 });
 
 FeedSchema.virtual('comments', {
@@ -89,6 +105,13 @@ FeedSchema.virtual('post-content', {
 FeedSchema.virtual('event-content', {
   ref: 'Event',
   localField: 'event',
+  foreignField: '_id',
+  justOne: true
+});
+
+FeedSchema.virtual('poll-content', {
+  ref: 'Poll',
+  localField: 'poll',
   foreignField: '_id',
   justOne: true
 });

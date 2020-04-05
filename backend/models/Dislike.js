@@ -24,18 +24,24 @@ const DislikeSchema = new mongoose.Schema(
 
 DislikeSchema.index({ post: 1, user: 1 }, { unique: true });
 
-CommentSchema.statics.getTotalDislikes = async function(postId) {
+DislikeSchema.statics.getTotalDislikes = async function(postId) {
   
-  const getTotal = this.countDocuments( {post: postId});
+  this.countDocuments( {post: postId}, async (err, count) => {
 
+    if(err) {
+      console.log(err);
+    }
 
-  try {
-    await this.model('Post').findByIdAndUpdate(postId, {
-      totalDislikes: getTotal
-    });
-  } catch (err) {
-    console.error(err);
-  }
+    try {
+      await this.model('Post').findByIdAndUpdate(postId, {
+        totalDislikes: count
+      });
+    } catch (err) {
+      console.error(err);
+    }
+
+  });
+
 };
 
 // Call getTotalDislikes after save
@@ -44,7 +50,7 @@ DislikeSchema.post('save', function() {
 });
 
 // Call getTotalDislikes before remove
-DislikeSchema.pre('remove', function() {
+DislikeSchema.post('remove', function() {
   this.constructor.getTotalDislikes(this.post);
 });
 

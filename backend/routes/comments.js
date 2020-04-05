@@ -1,4 +1,4 @@
-const express = require('express');
+express = require('express');
 const {
   getComments,
   addComment,
@@ -27,7 +27,7 @@ router
 router
   .route('/:commentId')
   .get(getComment)
-  .put(updateComment)
+  //.put(updateComment)
   .delete(deleteComment);
 
 module.exports = router;
