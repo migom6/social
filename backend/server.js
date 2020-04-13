@@ -24,7 +24,7 @@ connectDB();
 // Route files
 // const bootcamps = require('./routes/bootcamps');
 // const courses = require('./routes/courses');
-const auth = require("./routes/auth");
+// const auth = require("./routes/auth");
 const oauth = require("./routes/oauth");
 const users = require("./routes/users");
 const feeds = require("./routes/feeds");
@@ -79,9 +79,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
 
 // Mount routers
-// app.use('/api/v1/bootcamps', bootcamps);
-// app.use('/api/v1/courses', courses);
-app.use("/api/v1/auth", auth);
+// app.use("/api/v1/auth", auth);
 app.use("/api/v1/oauth", oauth);
 app.use("/api/v1/users", users);
 app.use("/api/v1/feeds", feeds);

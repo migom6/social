@@ -1,31 +1,28 @@
-express = require('express');
+express = require("express");
 const {
   getComments,
   addComment,
-  updateComment,
+  // updateComment,
   deleteComment,
-  getComment
-} = require('../controllers/comments');
+  getComment,
+} = require("../controllers/comments");
 
-const Comment = require('../models/Comment');
+const Comment = require("../models/Comment");
 
 const router = express.Router({ mergeParams: true });
 
-const advancedResults = require('../middleware/advancedResults');
-const { protect } = require('../middleware/auth');
+const advancedResults = require("../middleware/advancedResults");
+const { protect } = require("../middleware/auth");
 
 router.use(protect);
 
 router
-  .route('/')
-  .get(
-    advancedResults(Comment, []),
-    getComments
-  )
+  .route("/")
+  .get(advancedResults(Comment, []), getComments)
   .post(addComment);
 
 router
-  .route('/:commentId')
+  .route("/:commentId")
   .get(getComment)
   //.put(updateComment)
   .delete(deleteComment);
