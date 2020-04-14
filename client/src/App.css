@@ -1,0 +1,105 @@
+#main {
+  display: grid;
+  grid-template-rows: 60px 1fr;
+  grid-template-columns: 20% 60% auto;
+  grid-template-areas:
+    "nav    nav    nav"
+    "left  feed   right";
+}
+
+/* @media (max-width: 400px) {
+  #main {
+    display: grid;
+    grid-template-rows: 60px 1fr;
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      " nav "
+      " feed ";
+  }
+  #right {
+    display: none;
+  }
+  #left {
+    display: none;
+  }
+}
+
+@media (max-width: 800px) {
+  #main {
+    display: grid;
+    grid-template-rows: 60px 1fr;
+    grid-template-columns: 3fr 1fr;
+    grid-template-areas:
+      " nav nav "
+      " feed right";
+  }
+  #left {
+    display: none;
+  }
+} */
+
+#nav {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0px;
+  grid-area: nav;
+  background-color: #8ca0ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#left {
+  grid-area: left;
+  position: fixed;
+  top: 60px;
+  left: 0px;
+  width: 20%;
+  height: 100vh;
+}
+
+#right {
+  grid-area: right;
+  position: fixed;
+  top: 60px;
+  right: 0px;
+  width: 20%;
+  height: 100%;
+}
+
+#right:hover {
+  overflow: auto;
+}
+
+#feeds {
+  grid-area: feed;
+  background-color: #f8c3e8;
+}
+
+#extras {
+  width: 100%;
+  background-color: aqua;
+}
+
+#events {
+  height: 40%;
+  min-height: 200px;
+  background-color: #ffff64;
+}
+
+#chats {
+  height: 60%;
+  min-height: 320px;
+  background-color: #2875ce;
+}
+
+.feed {
+  height: 480px;
+  background-color: #80e28e;
+  margin: 20px;
+}
+
+#add-feed {
+  position: absolute;
+  right: 20%;
+}

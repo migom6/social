@@ -1,5 +1,7 @@
 const path = require("path");
 const express = require("express");
+const socketIO = require("socket.io");
+const http = require("http");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
@@ -90,9 +92,21 @@ app.use("/api/v1/polls", polls);
 
 app.use(errorHandler);
 
+const server = http.Server(app);
+
+// chat socket connection
+const io = socketIO(server);
+
+const chatSocket = require("./socket");
+const { Users } = require("./socket/utils");
+
+var people = new Users();
+chatSocket(io, people);
+
+// start server
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(
+server.listen(
   PORT,
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
