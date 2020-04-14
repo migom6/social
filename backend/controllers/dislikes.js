@@ -47,7 +47,7 @@ exports.dislike = asyncHandler(async (req, res, next) => {
 });
 
 exports.dislikes = asyncHandler(async (req, res, next) => {
-  let DISlikes = await dislike.find({ post: req.params.id });
+  let dislikes = await dislike.find({ post: req.params.id });
 
   res.status(200).json({
     success: true,
