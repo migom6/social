@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import moment from "moment";
+import Picker, { SKIN_TONE_MEDIUM_DARK } from "emoji-picker-react";
+import { Menu, Dropdown, Button } from "antd";
+
 import Messages from "./Messages";
 
 const socket = io("ws://localhost:3001");
@@ -20,6 +23,7 @@ export const ChatBox = () => {
         console.log(err);
       }
     });
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -35,19 +39,16 @@ export const ChatBox = () => {
         room: message.room,
         createdDate: formattedTime,
       };
-      setMessages([...messages, newMsg]);
 
-      //   var msgArr = scopeThis.state.messages.filter(
-      //     (message) => message.room === this.props.match.params.room
-      //   );
-      //   if (msgArr.length > 3) {
-      //     scopeThis.scrollToBottom();
-      //   }
+      console.log(message);
+      console.log(messages.length);
+      setMessages((oldMessages) => [newMsg, ...oldMessages]);
     });
 
     return () => {
       socket.emit("leave", params);
     };
+    // eslint-disable-next-line
   }, []);
 
   const clearForm = () => {
@@ -67,10 +68,28 @@ export const ChatBox = () => {
     socket.emit("createMessage", obj, function (data) {});
     clearForm();
   };
+
+  const onEmojiClick = (event, emojiObject) => {
+    setMsg((msg) => msg + emojiObject.emoji);
+  };
+
+  // div chat-box
   return (
-    <div>
+    <div id="chat-box">
       <Messages messages={messages} room={params.room} />
+
       <form onSubmit={newMessage}>
+        <Dropdown
+          overlay={() => (
+            <Picker
+              onEmojiClick={onEmojiClick}
+              skinTone={SKIN_TONE_MEDIUM_DARK}
+            />
+          )}
+          placement="topCenter"
+        >
+          <span id="btn-emoji">🤩</span>
+        </Dropdown>
         <input
           name="newMsg"
           placeholder="Type your message..."

@@ -16,16 +16,16 @@ module.exports = (io, users) => {
       users.addUser(socket.id, params.name, params.room);
 
       io.to(params.room).emit("updateUserList", users.getUserList(params.room));
-      socket.emit(
-        "newMessage",
-        generateMessage("Admin", params.room, "Welcome to the chat app.")
-      );
-      socket.broadcast
-        .to(params.room)
-        .emit(
-          "newMessage",
-          generateMessage("Admin", params.room, `${params.name} has joined.`)
-        );
+      // socket.emit(
+      //   "newMessage",
+      //   generateMessage("Admin", params.room, "Welcome to the chat app.")
+      // );
+      // socket.broadcast
+      //   .to(params.room)
+      //   .emit(
+      //     "newMessage",
+      //     generateMessage("Admin", params.room, `${params.name} has joined.`)
+      //   );
 
       callback();
     });
@@ -40,16 +40,6 @@ module.exports = (io, users) => {
         });
       }
       callback();
-    });
-
-    socket.on("createLocationMsg", (coords) => {
-      var user = users.getUser(socket.id);
-      if (user) {
-        io.to(user.room).emit(
-          "createLocationMsg",
-          generateLocationMessage(user.name, user.room, coords.lat, coords.lon)
-        );
-      }
     });
 
     socket.on("disconnect", () => {

@@ -1,7 +1,13 @@
+#logo {
+  font-size: 2.5em;
+  font-weight: bold;
+  color: aliceblue;
+}
+
 #main {
   display: grid;
-  grid-template-rows: 60px 1fr;
-  grid-template-columns: 20% 60% auto;
+  grid-template-rows: 60px auto;
+  grid-template-columns: 25% 50% auto;
   grid-template-areas:
     "nav    nav    nav"
     "left  feed   right";
@@ -47,59 +53,150 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 
 #left {
-  grid-area: left;
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
   top: 60px;
-  left: 0px;
-  width: 20%;
-  height: 100vh;
+  height: calc(100vh - 60px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  grid-area: left;
+  background-color: khaki;
 }
 
 #right {
   grid-area: right;
-  position: fixed;
+  position: -webkit-sticky;
+  position: sticky;
   top: 60px;
-  right: 0px;
-  width: 20%;
-  height: 100%;
+  height: calc(100vh - 60px);
+  background-color: darkgoldenrod;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-#right:hover {
-  overflow: auto;
+#chat-box {
+  background-color: deeppink;
+  height: 90%;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
+
+#messages {
+  display: flex;
+  flex-direction: column-reverse;
+  height: 100%;
+  background-color: deeppink;
+  overflow: hidden;
+  z-index: 3;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+#messages:hover {
+  overflow-y: scroll;
+}
+
+form {
+  height: 50px;
+  background-color: greenyellow;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+/* dont touch from here */
 
 #feeds {
   grid-area: feed;
-  background-color: #f8c3e8;
 }
 
 #extras {
-  width: 100%;
   background-color: aqua;
 }
 
-#events {
-  height: 40%;
-  min-height: 200px;
-  background-color: #ffff64;
-}
-
-#chats {
-  height: 60%;
-  min-height: 320px;
-  background-color: #2875ce;
-}
-
 .feed {
-  height: 480px;
-  background-color: #80e28e;
   margin: 20px;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.feed-user {
+  align-self: flex-start;
+  margin-bottom: 0.5em;
+  color: darkgrey;
+}
+
+.feed-title {
+  align-self: flex-start;
+
+  font-weight: bold;
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+
+.feed-img {
+  max-width: 400px;
+  object-fit: cover;
+  margin-bottom: 1em;
+}
+
+.feed-meta {
+  align-self: flex-start;
+  margin-bottom: 0.5em;
+  color: rgb(150, 148, 148);
+}
+
+.feed-icon {
+  margin-right: 0.5em;
+}
+
+.feed-icon {
+  cursor: pointer;
 }
 
 #add-feed {
   position: absolute;
-  right: 20%;
+  right: 25%;
 }
+
+.msg {
+  background-color: darkseagreen;
+  margin-top: 0.5em;
+  padding: 1em;
+  border-radius: 0.5em;
+}
+
+#btn-emoji {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
+  padding: 0px;
+  background-color: transparent;
+}
+
+#btn-emoji {
+  cursor: pointer;
+}
+/* 
+.btn-emoji:focus {
+  background-color: transparent;
+} */
