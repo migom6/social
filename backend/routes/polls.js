@@ -1,28 +1,23 @@
-const express = require('express');
+const express = require("express");
 const {
+  vote,
+  // getUsers,
+  getPolls,
+  getPollbyId,
+} = require("../controllers/polls");
 
-    vote,
-    // getUsers,
-    getPolls
-
-} = require('../controllers/polls');
-
-const Poll = require('../models/Poll');
+const Poll = require("../models/Poll");
 
 const router = express.Router();
 
-const advancedResults = require('../middleware/advancedResults');
-const { protect, authorize } = require('../middleware/auth');
+const advancedResults = require("../middleware/advancedResults");
+const { protect } = require("../middleware/auth");
 
 router.use(protect);
 
-router
-    .route('/')
-    .get(advancedResults(Poll), getPolls);
+router.route("/").get(advancedResults(Poll), getPolls);
 
-router
-    .route('/:pollId')
-    .post(vote);
+router.route("/:pollId").get(getPollbyId).post(vote);
 
 // router
 //     .route('/:pollId/users')

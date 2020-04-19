@@ -1,60 +1,91 @@
-const crypto = require('crypto');
-const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const crypto = require("crypto");
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
-const UserSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, 'Please add a name']
+const UserSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Please add a name"],
+    },
+    email: {
+      type: String,
+      required: [true, "Please add an email"],
+      unique: true,
+      match: [
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        "Please add a valid email",
+      ],
+    },
+    role: {
+      type: String,
+      enum: ["user", "publisher"],
+      default: "user",
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
-  email: {
-    type: String,
-    required: [true, 'Please add an email'],
-    unique: true,
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid email'
-    ]
-  },
-  role: {
-    type: String,
-    enum: ['user', 'publisher'],
-    default: 'user'
-  },
-  password: {
-    type: String,
-    required: [true, 'Please add a password'],
-    minlength: 6,
-    select: false
-  },
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-},
   {
     toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toObject: { virtuals: true },
+  }
+);
 
-  });
+// const UserSchema = new mongoose.Schema({
+//   name: {
+//     type: String,
+//     required: [true, 'Please add a name']
+//   },
+//   email: {
+//     type: String,
+//     required: [true, 'Please add an email'],
+//     unique: true,
+//     match: [
+//       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+//       'Please add a valid email'
+//     ]
+//   },
+//   role: {
+//     type: String,
+//     enum: ['user', 'publisher'],
+//     default: 'user'
+//   },
+//   password: {
+//     type: String,
+//     required: [true, 'Please add a password'],
+//     minlength: 6,
+//     select: false
+//   },
+//   resetPasswordToken: String,
+//   resetPasswordExpire: Date,
+//   createdAt: {
+//     type: Date,
+//     default: Date.now
+//   }
+// },
+//   {
+//     toJSON: { virtuals: true },
+//     toObject: { virtuals: true }
+
+//   });
 
 // Encrypt password using bcrypt
-UserSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) {
-    next();
-  }
+// UserSchema.pre('save', async function (next) {
+//   if (!this.isModified('password')) {
+//     next();
+//   }
 
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-});
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+// });
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: process.env.JWT_EXPIRE,
   });
 };
 
@@ -66,13 +97,13 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
 // Generate and hash password token
 UserSchema.methods.getResetPasswordToken = function () {
   // Generate token
-  const resetToken = crypto.randomBytes(20).toString('hex');
+  const resetToken = crypto.randomBytes(20).toString("hex");
 
   // Hash token and set to resetPasswordToken field
   this.resetPasswordToken = crypto
-    .createHash('sha256')
+    .createHash("sha256")
     .update(resetToken)
-    .digest('hex');
+    .digest("hex");
 
   // Set expire
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
@@ -80,11 +111,11 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-UserSchema.virtual('feeds', {
-  ref: 'Feed',
-  localField: '_id',
-  foreignField: 'user',
-  justOne: false
+UserSchema.virtual("feeds", {
+  ref: "Feed",
+  localField: "_id",
+  foreignField: "user",
+  justOne: false,
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);

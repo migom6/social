@@ -1,22 +1,13 @@
-const express = require('express');
-const {
-    like,
-    likes
-} = require('../controllers/likes');
-
-const Like = require('../models/Like');
+const express = require("express");
+const { like, likes } = require("../controllers/likes");
 
 const router = express.Router({ mergeParams: true });
 
-const advancedResults = require('../middleware/advancedResults');
-const { protect, authorize } = require('../middleware/auth');
+const { protect } = require("../middleware/auth");
 
 router.use(protect);
 
-router
-    .route('/')
-    .post(like);
-
-
+router.route("/").post(like);
+router.route("/").get(likes);
 
 module.exports = router;

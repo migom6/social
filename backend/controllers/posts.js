@@ -1,7 +1,7 @@
-const path = require('path');
-const ErrorResponse = require('../utils/errorResponse');
-const asyncHandler = require('../middleware/async');
-const Post = require('../models/Post');
+const path = require("path");
+const ErrorResponse = require("../utils/errorResponse");
+const asyncHandler = require("../middleware/async");
+const Post = require("../models/Post");
 
 // @desc      Get all posts
 // @route     GET /api/v1/posts
@@ -14,11 +14,11 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 // @route     GET /api/v1/posts/:id
 // @access    Public
 exports.getPost = asyncHandler(async (req, res, next) => {
-  const post = await Post.findById(req.params.id);
+  const post = await Post.findById(req.params.postId);
 
   if (!post) {
     return next(
-      new ErrorResponse(`Post not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`Post not found with id of ${req.params.postId}`, 404)
     );
   }
 
@@ -28,17 +28,17 @@ exports.getPost = asyncHandler(async (req, res, next) => {
 // @desc      Create new post
 // @route     POST /api/v1/posts
 // @access    Private
-exports.createPost = asyncHandler(async (req, res, next) => {
-  // Add user to req,body
-  req.body.user = req.user.id;
+// exports.createPost = asyncHandler(async (req, res, next) => {
+//   // Add user to req,body
+//   req.body.user = req.user.id;
 
-  const post = await Post.create(req.body);
+//   const post = await Post.create(req.body);
 
-  res.status(201).json({
-    success: true,
-    data: post
-  });
-});
+//   res.status(201).json({
+//     success: true,
+//     data: post
+//   });
+// });
 
 // @desc      Update post
 // @route     PUT /api/v1/posts/:id
