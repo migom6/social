@@ -40,8 +40,9 @@ class Users {
 
   getUserList(room) {
     var users = this.users.filter((user) => user.room === room);
-    var namesArr = users.map((user) => user.name);
-    return namesArr;
+    return users.length || 0;
+    // var namesArr = users.map((user) => user.name);
+    // return namesArr;
   }
 }
 

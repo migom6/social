@@ -2,14 +2,24 @@ import React, { useState, useEffect } from "react";
 import io from "socket.io-client";
 import moment from "moment";
 import Picker, { SKIN_TONE_MEDIUM_DARK } from "emoji-picker-react";
-import { Menu, Dropdown, Button } from "antd";
+
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Input,
+  Button,
+  PseudoBox,
+  Flex,
+  Stack,
+} from "@chakra-ui/core";
 
 import Messages from "./Messages";
 
 const socket = io("ws://localhost:3001");
 
 export const ChatBox = () => {
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(0);
   const [messages, setMessages] = useState([]);
   const [msg, setMsg] = useState("");
   const params = {
@@ -60,7 +70,7 @@ export const ChatBox = () => {
     setMsg(value);
   };
 
-  const newMessage = (e) => {
+  const send = (e) => {
     e.preventDefault();
     var obj = {
       text: msg,
@@ -75,33 +85,46 @@ export const ChatBox = () => {
 
   // div chat-box
   return (
-    <div id="chat-box">
+    <Stack h={"100%"} w={"100%"} borderRadius="2em" bg={"gray.800"} px={"1em"}>
       <Messages messages={messages} room={params.room} />
-
-      <form onSubmit={newMessage}>
-        <Dropdown
-          overlay={() => (
+      <Flex
+        h={"60px"}
+        as="form"
+        onSubmit={send}
+        justifyContent={"space-between"}
+        alignItems={"center"}
+      >
+        <Popover trigger="hover">
+          <PopoverTrigger>
+            <PseudoBox
+              as="button"
+              paddingRight="0.5em"
+              rounded="50%"
+              fontWeight="semibold"
+              color="#4b4f56"
+            >
+              🤩
+            </PseudoBox>
+          </PopoverTrigger>
+          <PopoverContent zIndex={4} width={""}>
             <Picker
               onEmojiClick={onEmojiClick}
               skinTone={SKIN_TONE_MEDIUM_DARK}
             />
-          )}
-          placement="topCenter"
-        >
-          <span id="btn-emoji">🤩</span>
-        </Dropdown>
-        <input
+          </PopoverContent>
+        </Popover>
+        <Input
+          borderRadius={"15px"}
+          variant="filled"
+          color="white"
+          size="sm"
           name="newMsg"
-          placeholder="Type your message..."
-          autoComplete="off"
           value={msg}
           onChange={inputUpdate}
+          placeholder={`${users} users online...`}
+          autoComplete="off"
         />
-
-        <button type="submit" className="btn">
-          send msg
-        </button>
-      </form>
-    </div>
+      </Flex>
+    </Stack>
   );
 };
