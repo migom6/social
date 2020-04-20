@@ -6,10 +6,7 @@ const listStyle = {
   flexDirection: "column-reverse",
   height: "100%",
   overflow: "hidden",
-  // "::-webkit-scrollbar": { width: 0 },
 };
-
-const messageStyle = {};
 
 const Messages = ({ messages, room }) => {
   return (
@@ -37,7 +34,7 @@ const Messages = ({ messages, room }) => {
           >
             <Avatar
               gridArea="logo"
-              src="https://bit.ly/broken-link"
+              src="https://avatars0.githubusercontent.com/u/13897276?s=400&u=7d1b1eca14a49b36aa10d58883152d6f09cc66e7&v=4"
               size="xs"
             ></Avatar>
             <Text gridArea="sender" fontSize={"xs"} color={"gray.500"}>

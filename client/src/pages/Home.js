@@ -1,10 +1,10 @@
 import React from "react";
-import Feed from "../components/Feed";
+
+import Feed from "../components/feeds/Feed";
 import { ChatBox } from "../components/chat/ChatBox";
 import {
   Button,
   Text,
-  Box,
   Popover,
   PopoverContent,
   PopoverTrigger,

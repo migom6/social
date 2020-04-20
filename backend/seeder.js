@@ -1,9 +1,7 @@
 const fs = require("fs");
 const mongoose = require("mongoose");
-const colors = require("colors");
 const dotenv = require("dotenv");
 const asyncHandler = require("./middleware/async");
-const connectDB = require("./config/db");
 
 // Load env vars
 dotenv.config({ path: "./config/config.env" });
@@ -15,10 +13,6 @@ const Comment = require("./models/Comment");
 const Post = require("./models/Post");
 const Poll = require("./models/Poll");
 const Event = require("./models/Event");
-const EventUser = require("./models/EventUser");
-const PollUser = require("./models/Post");
-const Like = require("./models/Like");
-const Dislike = require("./models/Dislike");
 
 // Connect to DB
 var con = mongoose.connect(process.env.MONGO_URI, {
@@ -50,15 +44,13 @@ const commentsFile = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/comments.json`, "utf-8")
 );
 
-console.log(postsFile[0]);
-
 // local store the variables
 
 const users = [];
 const feeds = [];
-const comments = [];
+// const comments = [];
 
-const createDb = asyncHandler(async () => {
+const createDb = async () => {
   // Create Users and store them in users array
   await Promise.all(
     usersFile.map(async (user_data, index) => {
@@ -108,6 +100,8 @@ const createDb = asyncHandler(async () => {
       })
     );
   });
-});
+
+  console.log("hi");
+};
 
 createDb();

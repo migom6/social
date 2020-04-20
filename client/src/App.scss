@@ -1,8 +1,12 @@
+#root {
+  display: flex;
+  justify-content: center;
+}
 #main {
   display: grid;
-  // max-width: 100%;
+  width: 100%;
   grid-template-rows: 60px auto;
-  grid-template-columns: 25vw 50vw auto;
+  grid-template-columns: 30% 40% auto;
   grid-template-areas:
     "nav    nav    nav"
     "left  feed   right";
@@ -89,50 +93,8 @@
 
 #feeds {
   grid-area: feed;
-
-  .feed {
-    margin: 20px;
-    border-bottom: 1px solid lightgrey;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  #extras {
-    background-color: aqua;
-  }
-
-  .feed-user {
-    align-self: flex-start;
-    margin-bottom: 0.5em;
-    color: darkgrey;
-  }
-
-  .feed-title {
-    align-self: flex-start;
-
-    font-weight: bold;
-    font-size: 1.2em;
-    margin-bottom: 1em;
-  }
-
-  .feed-img {
-    max-width: 400px;
-    object-fit: cover;
-    margin-bottom: 1em;
-  }
-
-  .feed-meta {
-    align-self: flex-start;
-    margin-bottom: 0.5em;
-    color: rgb(150, 148, 148);
-
-    span {
-      margin-right: 0.5em;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
+  // background-color: #2d3748;
+}
+#extras {
+  background-color: aqua;
 }

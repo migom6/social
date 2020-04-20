@@ -8,7 +8,6 @@ import {
   PopoverTrigger,
   PopoverContent,
   Input,
-  Button,
   PseudoBox,
   Flex,
   Stack,
@@ -96,6 +95,7 @@ export const ChatBox = () => {
       >
         <Popover trigger="hover">
           <PopoverTrigger>
+            {/* eslint-disable-next-line */}
             <PseudoBox
               as="button"
               paddingRight="0.5em"
