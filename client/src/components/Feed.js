@@ -21,15 +21,15 @@ const Post = ({
         {user} | {time}
       </div>
       <div className="feed-title">{title}</div>
-      <img className="feed-img" src={image} />
+      {image ? <img className="feed-img" src={image} /> : null}
       <div className="feed-meta">
-        <span className="feed-icon">
+        <span>
           {totalLikes} <LikeOutlined />
         </span>
-        <span className="feed-icon">
+        <span>
           {totalDislikes} <DislikeOutlined />
         </span>
-        <span className="feed-icon">
+        <span>
           {totalComments} <CommentOutlined />
         </span>
       </div>
@@ -52,7 +52,7 @@ function Feed() {
     },
     {
       title: "You know what really grind my gear?",
-      image: "https://img-9gag-fun.9cache.com/photo/a1Rzr8P_460swp.webp",
+      image: "",
       user: "migom",
       totalComments: 34,
       totalDislikes: 12,
