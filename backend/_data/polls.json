@@ -1,0 +1,10 @@
+[
+  {
+    "title": "1st Poll",
+    "chicees": [{ "choice": "yes" }, { "choice": "no" }, { "choice": "none" }]
+  },
+  {
+    "title": "2nd Poll",
+    "chicees": [{ "choice": "yes" }, { "choice": "no" }, { "choice": "none" }]
+  }
+]
