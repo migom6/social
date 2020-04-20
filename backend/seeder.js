@@ -49,13 +49,14 @@ const pollsFile = JSON.parse(
 const commentsFile = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/comments.json`, "utf-8")
 );
-const feedsFile = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/feeds.json`, "utf-8")
-);
+
+console.log(postsFile[0]);
 
 // local store the variables
 
-var users = [];
+const users = [];
+const feeds = [];
+const comments = [];
 
 const createDb = asyncHandler(async () => {
   // Create Users and store them in users array
@@ -66,66 +67,47 @@ const createDb = asyncHandler(async () => {
     })
   );
 
+  // get one user
   let userId = users[0]._id;
-  let postId = 0;
-  let eventId = 0;
-  let pollId = 0;
-  let feedId = 0;
-  let commentId = 0;
 
   //create the feeds
+
   await Promise.all(
-    feedsFile.map(async (feed) => {
-      let feedIdLocal;
-
-      if (feed.kind === "post") {
-        await Promise.all(
-          postsFile.map(async (post_data) => {
-            // first making the post then create the feed
-            post = await Post.create(post_data);
-            feed = await Feed.create({ user: userId, post, kind: feed.kind });
-            if (feedId === 0 && postId === 0) {
-              postId = post._id;
-              feedId = feed._id;
-            }
-            feedIdLocal = feed._id;
-          })
-        );
-      } else if (feed.kind === "event") {
-        await Promise.all(
-          eventsFile.map(async (event_data) => {
-            event = await Event.create(event_data);
-            feed = await Feed.create({ user: userId, event, kind: feed.kind });
-            if (eventId === 0) {
-              eventId = event._id;
-            }
-            feedIdLocal = feed._id;
-          })
-        );
-      } else if (feed.kind === "poll") {
-        await Promise.all(
-          pollsFile.map(async (poll_data) => {
-            poll = await Poll.create(poll_data);
-            feed = await Feed.create({ user: userId, poll, kind: feed.kind });
-            if (pollId === 0) {
-              pollId = poll._id;
-            }
-            feedIdLocal = feed._id;
-          })
-        );
-      }
-
-      await Promise.all(
-        commentsFile.map(async (comment_data, index) => {
-          comment = await Comment.create({
-            text: comment_data.text,
-            feed: feedIdLocal,
-            user: users[index + 1]._id,
-          });
-        })
-      );
+    postsFile.map(async (post_data) => {
+      // first making the post then create the feed
+      post = await Post.create(post_data);
+      feed = await Feed.create({ user: userId, post, kind: "post" });
+      feeds.push(feed);
     })
   );
+
+  await Promise.all(
+    eventsFile.map(async (event_data) => {
+      event = await Event.create(event_data);
+      feed = await Feed.create({ user: userId, event, kind: "event" });
+      feeds.push(feed);
+    })
+  );
+
+  await Promise.all(
+    pollsFile.map(async (poll_data) => {
+      poll = await Poll.create(poll_data);
+      feed = await Feed.create({ user: userId, poll, kind: "poll" });
+      feeds.push(feed);
+    })
+  );
+
+  feeds.slice(0, 2).map(async (feed) => {
+    await Promise.all(
+      commentsFile.map(async (comment_data, index) => {
+        comment = await Comment.create({
+          text: comment_data.text,
+          feed: feed._id, //getting the first feed
+          user: users[index + 1]._id,
+        });
+      })
+    );
+  });
 });
 
 createDb();
