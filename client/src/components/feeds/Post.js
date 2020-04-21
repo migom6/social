@@ -9,8 +9,10 @@ import {
   IconButton,
   Image,
 } from "@chakra-ui/core";
+import { Link } from "react-router-dom";
 
 const Post = ({
+  id,
   title,
   image,
   totalComments,
@@ -18,15 +20,9 @@ const Post = ({
   totalDislikes,
   user,
   time,
-  key,
 }) => {
   return (
-    <Stack
-      key={key}
-      paddingX="2em"
-      marginTop=".5em"
-      _hover={{ bg: "gray.100" }}
-    >
+    <Stack key={id} paddingX="2em" marginTop=".5em" _hover={{ bg: "gray.100" }}>
       <Flex justifyContent="space-between" color="gray.500" fontSize="xs">
         <Flex alignItems="center" w="25%" justifyContent="space-between">
           <Avatar
@@ -48,9 +44,11 @@ const Post = ({
           />
         </Flex>
       </Flex>
-      <Text fontSize="lg" fontWeight="bold" color="gray.700">
-        {title}
-      </Text>
+      <Link to={`/${id}`}>
+        <Text fontSize="lg" fontWeight="bold" color="gray.700">
+          {title}
+        </Text>
+      </Link>
       {image ? (
         <Image
           alignSelf="center"

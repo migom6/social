@@ -1,6 +1,9 @@
 import React from "react";
+import { Routes, Route, Link } from "react-router-dom";
 
+import Feeds from "../components/feeds/Feeds";
 import Feed from "../components/feeds/Feed";
+
 import { ChatBox } from "../components/chat/ChatBox";
 import {
   Button,
@@ -24,9 +27,11 @@ const Home = () => {
         />
       </div>
       <div id="nav">
-        <Text color="gray.100" fontWeight="bold" fontSize="4xl">
-          Social
-        </Text>
+        <Link to="/">
+          <Text color="gray.100" fontWeight="bold" fontSize="4xl">
+            Social
+          </Text>
+        </Link>
         <Popover trigger="hover">
           <PopoverTrigger>
             <Button variant="solid">add post</Button>
@@ -39,7 +44,10 @@ const Home = () => {
         </Popover>
       </div>
       <div id="feeds">
-        <Feed />
+        <Routes>
+          <Route path="/" element={<Feeds />} />
+          <Route path="/:id" element={<Feed />} />
+        </Routes>
       </div>
       <div id="right">
         <ChatBox />

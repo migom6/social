@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import {
   Stack,
   Divider,
@@ -16,7 +17,7 @@ const Poll = ({
   choices,
   user,
   time,
-  key,
+  id,
   totalVotes,
   voted,
 }) => {
@@ -33,12 +34,7 @@ const Poll = ({
   };
 
   return (
-    <Stack
-      key={key}
-      paddingX="2em"
-      marginTop=".5em"
-      _hover={{ bg: "gray.100" }}
-    >
+    <Stack key={id} paddingX="2em" marginTop=".5em" _hover={{ bg: "gray.100" }}>
       <Flex justifyContent="space-between" color="gray.500" fontSize="xs">
         <Flex alignItems="center" w="25%" justifyContent="space-between">
           <Avatar
@@ -60,9 +56,16 @@ const Poll = ({
           />
         </Flex>
       </Flex>
-      <Text fontSize="lg" fontWeight="bold" color="gray.700">
-        {title}
-      </Text>
+      <Link to={`/${id}`}>
+        <Text
+          fontSize="lg"
+          fontWeight="bold"
+          color="gray.700"
+          marginBottom="0.5em"
+        >
+          {title}
+        </Text>
+      </Link>
       {view === "vote" &&
         choices.map((element, key) => {
           return (
